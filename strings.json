@@ -1,0 +1,50 @@
+{
+	"INVOICE": {
+		"no": "FAKTURA"
+	},
+	"Invoice #": {
+		"no": "Fakturanummer"
+	},
+	"Billed to": {
+		"no": "Til"
+	},
+	"Pay to": {
+		"no": "Betales til"
+	},
+	"Details": {
+		"no": "Detaljer"
+	},
+	"Total amount": {
+		"no": "Totalsum"
+	},
+	"Product": {
+		"no": "Produkt"
+	},
+	"Service": {
+		"no": "Tjeneste"
+	},
+	"Hours": {
+		"no": "Timer"
+	},
+	"Count": {
+		"no": "Antall"
+	},
+	"Price": {
+		"no": "Pris"
+	},
+	"VAT": {
+		"no": "Mva."
+	},
+	"Amount": {
+		"no": "Subtotal"
+	},
+	"Subtotal": {
+		"no": "Subtotal"
+	},
+	"Total due by": {
+		"no": "Totalt å betale før"
+	},
+	"Notes": {
+		"no": "Meldinger"
+	}
+}

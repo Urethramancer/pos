@@ -31,10 +31,12 @@ func (cmd *CmdSetup) Run(in []string) error {
 		"E-mail",
 		"Database host",
 		"Database port",
+		"Database name",
 		"Database username",
 		"Database password",
 		"Company name",
 		"Company ID (org. #)",
+		"VAT percentage",
 	}
 
 	cfg := Config{
@@ -42,10 +44,12 @@ func (cmd *CmdSetup) Run(in []string) error {
 		Email:     "",
 		Host:      "localhost",
 		Port:      "5432",
+		DBName:    "invoices",
 		Username:  "postgres",
 		Password:  "postgres",
 		Company:   "",
 		CompanyID: "",
+		VAT:       "0",
 	}
 	m := log.Default.Msg
 
@@ -61,10 +65,12 @@ func (cmd *CmdSetup) Run(in []string) error {
 		cfg.Email,
 		cfg.Host,
 		cfg.Port,
+		cfg.DBName,
 		cfg.Username,
 		cfg.Password,
 		cfg.Company,
 		cfg.CompanyID,
+		cfg.VAT,
 	}
 
 	var x string
@@ -88,10 +94,11 @@ func (cmd *CmdSetup) Run(in []string) error {
 	cfg.Email = results[1]
 	cfg.Host = results[2]
 	cfg.Port = results[3]
-	cfg.Username = results[4]
-	cfg.Password = results[5]
-	cfg.Company = results[6]
-	cfg.CompanyID = results[7]
+	cfg.DBName = results[4]
+	cfg.Username = results[5]
+	cfg.Password = results[6]
+	cfg.Company = results[7]
+	cfg.CompanyID = results[8]
 
 	m("\nEnter the address to print on invoices. Enter '.' to end input.")
 	oldaddr := strings.Split(cfg.Address, "\n")
@@ -129,5 +136,10 @@ func (cmd *CmdSetup) Run(in []string) error {
 	}
 
 	cfg.Address = strings.Join(addr, "\n")
-	return cfg.Save(cross.ConfigName("config.json"))
+	err = cfg.Save(cross.ConfigName("config.json"))
+	if err != nil {
+		return err
+	}
+
+	return testDB(&cfg)
 }

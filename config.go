@@ -14,12 +14,16 @@ type Config struct {
 	Company string `json:"company"`
 	// Company ID on invoices.
 	CompanyID string `json:"companyid"`
+	// VAT percentage.
+	VAT string `json:"vat"`
 	// Address on invoices.
 	Address string `json:"address"`
 	// Host of Postgres DB.
 	Host string `json:"host"`
 	// Port of DB.
 	Port string `json:"port"`
+	// DBName is usually "invoices".
+	DBName string `json:"dbname"`
 	// Username to connect to DB.
 	Username string `json:"username"`
 	// Password of DB user.

@@ -141,5 +141,11 @@ func (cmd *CmdSetup) Run(in []string) error {
 		return err
 	}
 
-	return testDB(&cfg)
+	err = testDB(&cfg)
+	if err != nil {
+		return err
+	}
+
+	m("DB server pinged OK.")
+	return nil
 }

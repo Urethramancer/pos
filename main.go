@@ -17,6 +17,7 @@ import (
 // Options holds all the tool commands.
 var Options struct {
 	opt.DefaultHelp
+	Setup   CmdSetup   `command:"setup" help:"Set up the basic configuration."`
 	Client  CmdClient  `command:"client" help:"Subcommands for client management." aliases:"cl"`
 	Invoice CmdInvoice `command:"invoice" help:"Subcommands for invoice generation and publishing." aliases:"inv"`
 	Job     CmdJob     `command:"job" help:"Job/work order management."`

@@ -39,7 +39,7 @@ func (cmd *CmdSetup) Run(in []string) error {
 		"VAT percentage",
 	}
 
-	cfg := Config{
+	cfg := &Config{
 		Name:      "",
 		Email:     "",
 		Host:      "localhost",
@@ -141,11 +141,16 @@ func (cmd *CmdSetup) Run(in []string) error {
 		return err
 	}
 
-	err = testDB(&cfg)
+	err = testDBHost(cfg)
 	if err != nil {
 		return err
 	}
 
-	m("DB server pinged OK.")
+	m("DB server pinged OK. Ensuring database exists.")
+	err = ensureDBExists(cfg)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }

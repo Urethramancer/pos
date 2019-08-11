@@ -5,15 +5,47 @@
 	<title>{{.InvoiceTitle}}</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="">
+	<link rel="stylesheet" href="index.css">
 </head>
 
 <body>
-	Line 1: Logo, title ("INVOICE"),from w/account.
-	Line 2: To box (customer), details box (date, customer+company, invoice #), total amount and by-date
-	Line 3: Itemised list box
-	Line 4: Subtotal
-	Line 5: "Total due by (date)", total
+	<div id="header">
+		<div id="leftheader" class="headeritem">
+			Logo here
+		</div>
+		<div id="middleheader" class="headeritem fheader">
+			INVOICE
+		</div>
+		<div id="rightheader" class="headeritem f10">
+			Sender address and details
+		</div>
+	</div>
+
+	<div id="leftbox" class="boxitem f14">
+		<div class="boxbanner">Top box 1</div>
+		Contents
+	</div>
+	<div id="middlebox" class="boxitem">
+		<div class="boxbanner">Top box 2</div>
+		Contents
+	</div>
+	<div id="rightbox" class="boxitem">
+		<div class="boxbanner">Top box 3</div>
+		Contents
+	</div>
+
+
+	<div id="itemscontainer">
+		<div class="boxbanner">All the items</div>
+		<div id="items">
+			Stuff goes here
+		</div>
+		<div class="leftsub subtotal">Subtotal</div>
+		<div class="rightsub subtotal">1000</div>
+		<div class="lefttotal total">Total owed</div>
+		<div class="righttotal total">1000</div>
+	</div>
+
 </body>
 
 </html>

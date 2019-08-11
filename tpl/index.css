@@ -1,0 +1,133 @@
+body {
+	margin: 8px;
+	font-family: "Calibri Arkham", "Helvetica", "Verdana", "Georgia", sans-serif;
+}
+
+html, body {
+	position: absolute;
+	width: 210mm;
+	height: 297mm;
+}
+
+/*
+ * Header items
+ */
+
+#header {
+	position: absolute;
+}
+
+.headeritem {
+	position: absolute;
+	text-align: center;
+	top: 0;
+	width: 70mm;
+	height: 40mm;
+}
+
+#leftheader {
+	left: 10px;
+}
+
+#middleheader {
+	left: 72.5mm;
+}
+
+#rightheader {
+	left: 145mm;
+}
+
+/*
+ * Details boxes.
+ */
+
+.boxitem {
+	position: absolute;
+	top: 40mm;
+	width: 65mm;
+}
+
+#leftbox {
+	border: solid #82A9FC;
+	left: 0;
+	height: 50mm;
+}
+
+#middlebox {
+	border: solid #82A9FC;
+	left: 72.5mm;
+	height: 50mm;
+}
+
+#rightbox {
+	border: solid #82A9FC;
+	left: 145mm;
+	height: 50mm;
+}
+
+.boxbanner {
+	background: #82A9FC;
+	color: white;
+	padding-left: 4px;
+}
+
+.total, .subtotal {
+	position: absolute;
+	border-top: solid #82A9FC;
+	color: black;
+	padding-left: 4px;
+	padding-right: 4px;
+	text-align: right;
+}
+
+.total {
+	bottom: 0;
+}
+
+.subtotal {
+	bottom: 16pt;
+}
+
+.lefttotal, .leftsub {
+	left: 0;
+	width: 160mm;
+	border-right: solid #82A9FC;
+}
+
+.righttotal, .rightsub {
+	right: 0;
+	width: 45mm;
+	border-left: solid #82A9FC;
+}
+
+/*
+ * The itemised list of tasks and products.
+ */
+
+#itemscontainer {
+	position: absolute;
+	top: 95mm;
+	width: 210mm;
+	height: 180mm;
+	border: solid #82A9FC;
+}
+
+/*
+ * Font shortcuts.
+ */
+
+.f10 {
+	font-size: 10pt;
+}
+
+.f12 {
+	font-size: 12pt;
+}
+
+.f14 {
+	font-size: 14pt;
+}
+
+.fheader {
+	font-size: 36pt;
+}

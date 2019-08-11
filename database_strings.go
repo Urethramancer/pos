@@ -33,7 +33,8 @@ CREATE TABLE public.clients
 	-- This is a government-issued ID number, where applicable.
 	companyid character varying(30) COLLATE pg_catalog."default",
 	created timestamp with time zone,
-	CONSTRAINT clients_pkey PRIMARY KEY (id)
+	CONSTRAINT clients_pkey PRIMARY KEY (id),
+	CONSTRAINT company_unique UNIQUE (company)
 ) WITH (OIDS = FALSE) TABLESPACE pg_default;
 ALTER TABLE public.clients OWNER to {OWNER};
 

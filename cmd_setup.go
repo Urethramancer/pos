@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/Urethramancer/cross"
@@ -37,19 +38,21 @@ func (cmd *CmdSetup) Run(in []string) error {
 		"Company name",
 		"Company ID (org. #)",
 		"VAT percentage",
+		"Invoice prefix",
 	}
 
 	cfg := &Config{
-		Name:      "",
-		Email:     "",
-		Host:      "localhost",
-		Port:      "5432",
-		DBName:    "invoices",
-		Username:  "postgres",
-		Password:  "postgres",
-		Company:   "",
-		CompanyID: "",
-		VAT:       "0",
+		Name:          "",
+		Email:         "",
+		Host:          "localhost",
+		Port:          "5432",
+		DBName:        "invoices",
+		Username:      "postgres",
+		Password:      "postgres",
+		Company:       "",
+		CompanyID:     "",
+		VAT:           "0",
+		InvoicePrefix: "",
 	}
 	m := log.Default.Msg
 
@@ -71,6 +74,7 @@ func (cmd *CmdSetup) Run(in []string) error {
 		cfg.Company,
 		cfg.CompanyID,
 		cfg.VAT,
+		cfg.InvoicePrefix,
 	}
 
 	var x string
@@ -99,6 +103,36 @@ func (cmd *CmdSetup) Run(in []string) error {
 	cfg.Password = results[6]
 	cfg.Company = results[7]
 	cfg.CompanyID = results[8]
+	cfg.VAT = results[9]
+	cfg.InvoicePrefix = results[10]
+
+	x, err = line.Prompt(fmt.Sprintf("First invoice number [%d]", cfg.FirstInvoice))
+	if err != nil {
+		return err
+	}
+
+	if x != "" {
+		n, err := strconv.Atoi(x)
+		if err != nil {
+			return err
+		}
+
+		cfg.FirstInvoice = n
+	}
+
+	x, err = line.Prompt("Year prefix (yes/no) [no]")
+	if err != nil {
+		return err
+	}
+
+	switch x {
+	case "y", "yes", "Y", "YES", "t", "T", "true", "TRUE":
+		cfg.YearPrefix = true
+	case "":
+		break
+	default:
+		cfg.YearPrefix = false
+	}
 
 	m("\nEnter the address to print on invoices. Enter '.' to end input.")
 	oldaddr := strings.Split(cfg.Address, "\n")

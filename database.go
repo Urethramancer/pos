@@ -79,5 +79,38 @@ func ensureDBExists(cfg *Config) error {
 		return err
 	}
 
-	return nil
+	// And finally correct the sequence for the invoices.
+	q = fmt.Sprintf("ALTER SEQUENCE invoices_id_seq RESTART WITH %d;", cfg.FirstInvoice)
+	_, err = db.Exec(q)
+	return err
+}
+
+// Invoices is the name of our DB type to make it clear this isn't generic.
+type Invoices struct {
+	db *sql.DB
+}
+
+func OpenDB(host, port, user, password, dbname string, ssl bool) (*Invoices, error) {
+	sslmode := ""
+	if ssl {
+		sslmode = "enable"
+	} else {
+		sslmode = "disable"
+	}
+
+	info := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s", host, port, user, password, dbname, sslmode)
+	inv := &Invoices{}
+	var err error
+	inv.db, err = sql.Open("postgres", info)
+	if err != nil {
+		return nil, err
+	}
+
+	// Test the connection to the host and the database.
+	err = inv.db.Ping()
+	if err != nil {
+		return nil, err
+	}
+
+	return inv, nil
 }

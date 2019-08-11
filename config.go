@@ -28,6 +28,12 @@ type Config struct {
 	Username string `json:"username"`
 	// Password of DB user.
 	Password string `json:"password"`
+	// FirstInvoice is the number to start with on DB creation.
+	FirstInvoice int `json:"first_invoice"`
+	// InvoicePrefix goes before any year prefix and the number.
+	InvoicePrefix string `json:"invoice_prefix"`
+	// YearPrefix prepends the invoice number with the year.
+	YearPrefix bool `json:"year_prefix"`
 }
 
 func (cfg *Config) Load(fn string) error {

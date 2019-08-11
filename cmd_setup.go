@@ -152,5 +152,6 @@ func (cmd *CmdSetup) Run(in []string) error {
 		return err
 	}
 
+	m("Database OK.")
 	return nil
 }

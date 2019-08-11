@@ -38,7 +38,7 @@ CREATE TABLE public.clients
 ALTER TABLE public.clients OWNER to {OWNER};
 
 CREATE TRIGGER set_clients_timestamp
-BEFORE INSERT OR UPDATE ON public.clients
+BEFORE INSERT ON public.clients
 FOR EACH ROW
 EXECUTE PROCEDURE trigger_set_timestamp();
 
@@ -66,7 +66,7 @@ CREATE TABLE public.jobs
 ALTER TABLE public.jobs OWNER to {OWNER};
 
 CREATE TRIGGER set_jobs_timestamp
-BEFORE INSERT OR UPDATE ON public.jobs
+BEFORE INSERT ON public.jobs
 FOR EACH ROW
 EXECUTE PROCEDURE trigger_set_timestamp();
 
@@ -99,7 +99,7 @@ CREATE TABLE public.tasks
 ALTER TABLE public.tasks OWNER to {OWNER};
 
 CREATE TRIGGER set_tasks_timestamp
-BEFORE INSERT OR UPDATE ON public.tasks
+BEFORE INSERT ON public.tasks
 FOR EACH ROW
 EXECUTE PROCEDURE trigger_set_timestamp();
 
@@ -124,7 +124,7 @@ CREATE TABLE public.invoices
 ALTER TABLE public.invoices OWNER to {OWNER};
 
 CREATE TRIGGER set_invoices_timestamp
-BEFORE INSERT OR UPDATE ON public.invoices
+BEFORE INSERT ON public.invoices
 FOR EACH ROW
 EXECUTE PROCEDURE trigger_set_timestamp();
 `

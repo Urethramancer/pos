@@ -2,11 +2,6 @@ package main
 
 import (
 	"errors"
-	"io"
-	"sort"
-	"strings"
-
-	"github.com/peterh/liner"
 
 	"github.com/Urethramancer/signor/log"
 	"github.com/Urethramancer/signor/opt"
@@ -23,50 +18,12 @@ func (cmd *CmdShell) Run(in []string) error {
 		return errors.New(opt.ErrorUsage)
 	}
 
-	m := log.Default.Msg
-	m("Ctrl-D to quit, Tab for command completion, ? for a list of commands, ?? for a full shortcut list.")
-	line := liner.NewLiner()
-
-	commands := []string{
-		"setup",
-		"clients",
-		"invoices",
-		"jobs",
-		"tasks",
-	}
-	sort.Strings(commands)
-	line.SetCompleter(func(line string) (c []string) {
-		for _, n := range commands {
-			if strings.HasPrefix(n, strings.ToLower(line)) {
-				c = append(c, n)
-			}
-		}
-		return
-	})
-
-	defer line.Close()
-	running := true
-	for running {
-		x, err := line.Prompt("> ")
-		if err != nil {
-			if err == io.EOF {
-				m("")
-				return nil
-			}
-
-			return err
-		}
-
-		line.AppendHistory(x)
-		switch x {
-		case "?":
-			m("%s", Tablify(commands, 5))
-		case "??":
-			showShortcuts()
-		}
+	sh, err := NewShell()
+	if err != nil {
+		return err
 	}
 
-	return nil
+	return sh.Run()
 }
 
 func showShortcuts() {

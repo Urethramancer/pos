@@ -27,10 +27,12 @@ func (cmd *CmdShell) Run(in []string) error {
 	m("Ctrl-D to quit, Tab for command completion, ? for a list of commands, ?? for a full shortcut list.")
 	line := liner.NewLiner()
 
-	commands := []string{"setup",
-		"clients", "cl",
-		"invoices", "inv",
-		"jobs", "tasks",
+	commands := []string{
+		"setup",
+		"clients",
+		"invoices",
+		"jobs",
+		"tasks",
 	}
 	sort.Strings(commands)
 	line.SetCompleter(func(line string) (c []string) {

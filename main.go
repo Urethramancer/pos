@@ -21,6 +21,7 @@ var Options struct {
 	Client  CmdClient  `command:"client" help:"Subcommands for client management." aliases:"cl"`
 	Invoice CmdInvoice `command:"invoice" help:"Subcommands for invoice generation and publishing." aliases:"inv"`
 	Job     CmdJob     `command:"job" help:"Job/work order management."`
+	Shell   CmdShell   `command:"shell" help:"Run interactive shell." aliases:"sh"`
 }
 
 // ParseOptions could be renamed to main(), or called from main.

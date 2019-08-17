@@ -78,7 +78,13 @@ func (sh *Shell) clientCommands(args []string) {
 }
 
 func (sh *Shell) listClients() {
+	list, err := sh.db.GetAllClients()
+	if err != nil {
+		sh.e("Error retrieving client list: %s", err.Error())
+		return
+	}
 
+	printClients(list)
 }
 
 func (sh *Shell) addClient() {

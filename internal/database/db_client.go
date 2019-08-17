@@ -50,10 +50,32 @@ func (db *Invoices) GetClient(id int64) *Client {
 	return &c
 }
 
+// GetAllClients returns all clients.
+func (db *Invoices) GetAllClients() ([]*Client, error) {
+	q := "SELECT id,company,email,phone,address,vatid FROM public.clients;"
+	rows, err := db.Query(q)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+	var list []*Client
+	for rows.Next() {
+		var c Client
+		err = rows.Scan(&c.ID, &c.Company, &c.Email, &c.Phone, &c.Address, &c.VATID)
+		if err != nil {
+			return nil, err
+		}
+
+		list = append(list, &c)
+	}
+
+	return list, nil
+}
+
 // GetClients returns all matching clients.
-func (db *Invoices) GetClients(keyword string) []Client {
-	var c []Client
-	return c
+func (db *Invoices) GetClients(keyword string) ([]Client, error) {
+	return nil, nil
 }
 
 func (db *Invoices) RemoveClient(keyword string) error {

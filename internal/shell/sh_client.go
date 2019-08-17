@@ -1,5 +1,15 @@
 package shell
 
+import (
+	"os"
+	"strconv"
+	"text/tabwriter"
+
+	"github.com/Urethramancer/signor/stringer"
+
+	"github.com/Urethramancer/pos/internal/database"
+)
+
 func (sh *Shell) clientCommands(args []string) {
 	// commands := []string{"list", "add", "remove", "show", "find"}
 	if len(args) == 0 {
@@ -15,42 +25,42 @@ func (sh *Shell) clientCommands(args []string) {
 	args = args[1:]
 	switch cmd {
 	case "list":
-		sh.clientList()
+		sh.listClients()
 
 	case "add":
-		sh.clientAdd()
+		sh.addClient()
 
 	case "remove":
 		if len(args) == 0 {
 			sh.m("You must specify a client ID to remove.")
 			return
 		}
-		sh.clientRemove()
+		sh.removeClient()
 
 	case "show":
 		if len(args) == 0 {
 			sh.m("You must specify a client ID to show.")
 			return
 		}
-		sh.clientShow()
+		sh.showClient(args[0])
 
 	case "find":
 		if len(args) == 0 {
 			sh.m("You must specify a keyword to search for.")
 			return
 		}
-		sh.clientFind()
+		sh.findClients()
 
 	default:
 		sh.m("Unknown arguments.")
 	}
 }
 
-func (sh *Shell) clientList() {
+func (sh *Shell) listClients() {
 
 }
 
-func (sh *Shell) clientAdd() {
+func (sh *Shell) addClient() {
 	name, err := sh.Prompt("Company name: ")
 	if err != nil {
 		sh.e("Error: %s", err.Error())
@@ -90,14 +100,47 @@ func (sh *Shell) clientAdd() {
 	sh.m("Added client %s with ID %d.", name, id)
 }
 
-func (sh *Shell) clientRemove() {
+func (sh *Shell) removeClient() {
 
 }
 
-func (sh *Shell) clientShow() {
+func (sh *Shell) showClient(id string) {
+	x, err := strconv.Atoi(id)
+	if err != nil {
+		return
+	}
+	c := sh.db.GetClient(int64(x))
+	if c == nil {
+		sh.m("No client with that ID.")
+	} else {
+		printClient(c)
+	}
+}
+
+func (sh *Shell) findClients() {
 
 }
 
-func (sh *Shell) clientFind() {
+func printClient(c *database.Client) {
+	printClients([]*database.Client{c})
+}
 
+func printClients(list []*database.Client) {
+	tw := tabwriter.NewWriter(os.Stdout, 0, 8, 0, '\t', 0)
+	s := stringer.New()
+	s.WriteString("ID\tClient\tE-mail\tPhone\tAddress\tVAT ID\tCreated\n")
+	for _, c := range list {
+		s.WriteI(
+			c.ID,
+			"\t", c.Company,
+			"\t", c.Email,
+			"\t", c.Phone,
+			"\t", c.Address,
+			"\t", c.VATID,
+			"\t", c.Created.String(),
+			"\n",
+		)
+	}
+	_, _ = tw.Write([]byte(s.String()))
+	tw.Flush()
 }

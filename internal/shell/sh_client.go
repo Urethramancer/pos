@@ -5,9 +5,8 @@ import (
 	"strconv"
 	"text/tabwriter"
 
-	"github.com/Urethramancer/signor/stringer"
-
 	"github.com/Urethramancer/pos/internal/database"
+	"github.com/Urethramancer/signor/stringer"
 )
 
 func (sh *Shell) clientCommands(args []string) {
@@ -199,7 +198,14 @@ func (sh *Shell) promptClient(c *database.Client) *database.Client {
 }
 
 func (sh *Shell) removeClient(id int64) {
+	q := "DELETE FROM public.clients WHERE id=$1;"
+	_, err := sh.db.Exec(q, id)
+	if err != nil {
+		sh.e("Error removing client: %s", err.Error())
+		return
+	}
 
+	sh.m("Removed client %d.", id)
 }
 
 func (sh *Shell) showClient(id string) {

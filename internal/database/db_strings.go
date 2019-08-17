@@ -1,4 +1,4 @@
-package main
+package database
 
 const (
 	createdb = `CREATE DATABASE {DBNAME}
@@ -30,8 +30,8 @@ CREATE TABLE public.clients
 	phone character varying(20) COLLATE pg_catalog."default" NOT NULL DEFAULT '',
 	-- Physical address of the recipient.
 	address text COLLATE pg_catalog."default" NOT NULL DEFAULT '',
-	-- This is a government-issued ID number, where applicable.
-	companyid character varying(30) COLLATE pg_catalog."default",
+	-- This is a government-issued VAT registration and/or ID number, where applicable.
+	vatid character varying(30) COLLATE pg_catalog."default",
 	created timestamp with time zone,
 	CONSTRAINT clients_pkey PRIMARY KEY (id),
 	CONSTRAINT company_unique UNIQUE (company)

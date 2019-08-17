@@ -1,4 +1,4 @@
-package main
+package shell
 
 import (
 	"fmt"
@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/Urethramancer/cross"
+	"github.com/Urethramancer/pos/internal/database"
 	"github.com/Urethramancer/signor/log"
 	"github.com/peterh/liner"
 )
@@ -143,13 +144,13 @@ func (sh *Shell) Setup() error {
 		return err
 	}
 
-	err = testDBHost(sh.cfg)
+	err = database.TestDBHost(sh.cfg)
 	if err != nil {
 		return err
 	}
 
 	m("DB server pinged OK. Ensuring database exists.")
-	err = ensureDBExists(sh.cfg)
+	err = database.EnsureDBExists(sh.cfg)
 	if err != nil {
 		return err
 	}

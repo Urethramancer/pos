@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 
+	"github.com/Urethramancer/pos/internal/shell"
 	"github.com/Urethramancer/signor/opt"
 )
 
@@ -18,7 +19,7 @@ func (cmd *CmdSetup) Run(in []string) error {
 	}
 
 	var err error
-	sh, err := NewShell()
+	sh, err := shell.New()
 	if err != nil {
 		return err
 	}

@@ -78,7 +78,7 @@ func (sh *Shell) Close() {
 // LoadHistory from file.
 func (sh *Shell) LoadHistory() {
 	sh.State = liner.NewLiner()
-	sh.SetHistoryLimit(100)
+	// sh.SetHistoryLimit(100)
 	f, err := os.Open(sh.history)
 	if err != nil {
 		return

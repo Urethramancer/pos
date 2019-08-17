@@ -70,7 +70,7 @@ func (sh *Shell) clientCommands(args []string) {
 			sh.m("You must specify a keyword to search for.")
 			return
 		}
-		sh.findClients()
+		sh.findClients(args[0])
 
 	default:
 		sh.m("Unknown arguments.")
@@ -227,8 +227,19 @@ func (sh *Shell) showClient(id string) {
 	}
 }
 
-func (sh *Shell) findClients() {
+func (sh *Shell) findClients(keyword string) {
+	list, err := sh.db.GetClients(keyword)
+	if err != nil {
+		sh.e("Error retrieving clients: %s", err.Error())
+		return
+	}
 
+	if len(list) == 0 {
+		sh.m("No clients found.")
+		return
+	}
+
+	printClients(list)
 }
 
 func printClient(c *database.Client) {

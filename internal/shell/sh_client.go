@@ -205,8 +205,7 @@ func (sh *Shell) promptClient(c *database.Client) *database.Client {
 }
 
 func (sh *Shell) removeClient(id int64) {
-	q := "DELETE FROM public.clients WHERE id=$1;"
-	_, err := sh.db.Exec(q, id)
+	err := sh.db.RemoveClient(id)
 	if err != nil {
 		sh.e("Error removing client: %s", err.Error())
 		return

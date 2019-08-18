@@ -39,10 +39,10 @@ func (db *Invoices) UpdateClient(c *Client) error {
 
 // GetClient returns one client by ID.
 func (db *Invoices) GetClient(id int64) *Client {
-	q := "SELECT id,company,email,phone,address,vatid FROM public.clients WHERE id=$1 LIMIT 1;"
+	q := "SELECT id,company,email,phone,address,vatid,created FROM public.clients WHERE id=$1 LIMIT 1;"
 	row := db.QueryRow(q, id)
 	var c Client
-	err := row.Scan(&c.ID, &c.Company, &c.Email, &c.Phone, &c.Address, &c.VATID)
+	err := row.Scan(&c.ID, &c.Company, &c.Email, &c.Phone, &c.Address, &c.VATID, &c.Created)
 	if err != nil {
 		return nil
 	}
@@ -52,7 +52,7 @@ func (db *Invoices) GetClient(id int64) *Client {
 
 // GetAllClients returns all clients.
 func (db *Invoices) GetAllClients() ([]*Client, error) {
-	q := "SELECT id,company,email,phone,address,vatid FROM public.clients;"
+	q := "SELECT id,company,email,phone,address,vatid,created FROM public.clients;"
 	rows, err := db.Query(q)
 	if err != nil {
 		return nil, err
@@ -62,7 +62,7 @@ func (db *Invoices) GetAllClients() ([]*Client, error) {
 	var list []*Client
 	for rows.Next() {
 		var c Client
-		err = rows.Scan(&c.ID, &c.Company, &c.Email, &c.Phone, &c.Address, &c.VATID)
+		err = rows.Scan(&c.ID, &c.Company, &c.Email, &c.Phone, &c.Address, &c.VATID, &c.Created)
 		if err != nil {
 			return nil, err
 		}
@@ -75,7 +75,7 @@ func (db *Invoices) GetAllClients() ([]*Client, error) {
 
 // GetClients returns all matching clients.
 func (db *Invoices) GetClients(keyword string) ([]*Client, error) {
-	q := "SELECT id,company,email,phone,address,vatid FROM public.clients WHERE company LIKE '%' || $1 || '%';"
+	q := "SELECT id,company,email,phone,address,vatid,created FROM public.clients WHERE company LIKE '%' || $1 || '%';"
 	rows, err := db.Query(q, keyword)
 	if err != nil {
 		return nil, err
@@ -85,7 +85,7 @@ func (db *Invoices) GetClients(keyword string) ([]*Client, error) {
 	var list []*Client
 	for rows.Next() {
 		var c Client
-		err = rows.Scan(&c.ID, &c.Company, &c.Email, &c.Phone, &c.Address, &c.VATID)
+		err = rows.Scan(&c.ID, &c.Company, &c.Email, &c.Phone, &c.Address, &c.VATID, &c.Created)
 		if err != nil {
 			return nil, err
 		}
@@ -96,6 +96,13 @@ func (db *Invoices) GetClients(keyword string) ([]*Client, error) {
 	return list, nil
 }
 
-func (db *Invoices) RemoveClient(keyword string) error {
+// RemoveClient from database.
+func (db *Invoices) RemoveClient(id int64) error {
+	q := "DELETE FROM public.clients WHERE id=$1;"
+	_, err := db.Exec(q, id)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }

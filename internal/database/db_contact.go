@@ -56,8 +56,8 @@ func (db *Invoices) GetAllContacts() ([]*Contact, error) {
 
 	defer rows.Close()
 	var list []*Contact
+	var c Contact
 	for rows.Next() {
-		var c Contact
 		err = rows.Scan(&c.ID, &c.Name, &c.Email, &c.Phone, &c.Client, &c.Created)
 		if err != nil {
 			return nil, err
@@ -79,8 +79,8 @@ func (db *Invoices) GetContacts(keyword string) ([]*Contact, error) {
 
 	defer rows.Close()
 	var list []*Contact
+	var c Contact
 	for rows.Next() {
-		var c Contact
 		err = rows.Scan(&c.ID, &c.Name, &c.Email, &c.Phone, &c.Client, &c.Created)
 		if err != nil {
 			return nil, err

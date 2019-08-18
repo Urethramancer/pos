@@ -146,6 +146,20 @@ func (sh *Shell) listJobsFor(id int64) {
 	sh.printJobs(list)
 }
 
+func (sh *Shell) showJob(id int64) {
+	j, err := sh.db.GetJob(id)
+	if err != nil {
+		sh.e("Error retrieving job: %s", err.Error())
+		return
+	}
+
+	sh.printJob(j)
+}
+
+func (sh *Shell) printJob(j *database.Job) {
+	sh.m("Job %d for %s (%d): %d tasks")
+}
+
 func (sh *Shell) printJobs(list []*database.Job) {
 	tw := tabwriter.NewWriter(os.Stdout, 0, 8, 2, '\t', 0)
 	s := stringer.New()

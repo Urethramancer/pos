@@ -32,29 +32,39 @@ func (db *Invoices) UpdateJob(j *Job) error {
 }
 
 // GetJob returns one job by ID.
-func (db *Invoices) GetJob(id int64) *Job {
+func (db *Invoices) GetJob(id int64) (*Job, error) {
 	q := "SELECT id,client,currency,cost,created FROM public.jobs WHERE id=$1 LIMIT 1;"
 	row := db.QueryRow(q, id)
 	var j Job
 	err := row.Scan(&j.ID, &j.Client, &j.Currency, &j.Cost, &j.Created)
 	if err != nil {
-		return nil
+		return nil, err
 	}
 
-	return &j
+	return &j, nil
 }
 
 // GetJobsFor returns all jobs by client ID.
-func (db *Invoices) GetJobsFor(id int64) *Job {
+func (db *Invoices) GetJobsFor(id int64) ([]*Job, error) {
 	q := "SELECT id,client,currency,cost,created FROM public.jobs WHERE client=$1;"
-	row := db.QueryRow(q, id)
-	var j Job
-	err := row.Scan(&j.ID, &j.Client, &j.Currency, &j.Cost, &j.Created)
+	rows, err := db.Query(q, id)
 	if err != nil {
-		return nil
+		return nil, err
 	}
 
-	return &j
+	defer rows.Close()
+	var j Job
+	var list []*Job
+	for rows.Next() {
+		err := rows.Scan(&j.ID, &j.Client, &j.Currency, &j.Cost, &j.Created)
+		if err != nil {
+			return nil, err
+		}
+
+		list = append(list, &j)
+	}
+
+	return list, nil
 }
 
 // GetAllJobs returns all jobs, sorted by client.

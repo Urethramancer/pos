@@ -116,7 +116,8 @@ func (sh *Shell) Run() error {
 
 	commands := []string{
 		"setup",
-		"client", "job", "task", "invoice",
+		"client", "contact",
+		"job", "task", "invoice",
 	}
 	sort.Strings(commands)
 	sh.SetCompleter(func(line string) (c []string) {
@@ -162,6 +163,9 @@ func (sh *Shell) Run() error {
 
 		case "client":
 			sh.clientCommands(args)
+
+		case "contact":
+			sh.contactCommands(args)
 
 		case "task":
 

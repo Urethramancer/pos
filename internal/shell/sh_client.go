@@ -78,16 +78,6 @@ func (sh *Shell) clientCommands(args []string) {
 	}
 }
 
-func (sh *Shell) listClients() {
-	list, err := sh.db.GetAllClients()
-	if err != nil {
-		sh.e("Error retrieving client list: %s", err.Error())
-		return
-	}
-
-	printClients(list)
-}
-
 func (sh *Shell) addClient() {
 	c := sh.promptClient(nil)
 	if c == nil {
@@ -214,6 +204,16 @@ func (sh *Shell) removeClient(id int64) {
 	sh.m("Removed client %d.", id)
 }
 
+func (sh *Shell) listClients() {
+	list, err := sh.db.GetAllClients()
+	if err != nil {
+		sh.e("Error retrieving client list: %s", err.Error())
+		return
+	}
+
+	sh.printClients(list)
+}
+
 func (sh *Shell) showClients(idlist []string) {
 	var list []*database.Client
 	for _, id := range idlist {
@@ -231,7 +231,7 @@ func (sh *Shell) showClients(idlist []string) {
 	if len(list) == 0 {
 		sh.m("No clients found with supplied ID(s).")
 	} else {
-		printClients(list)
+		sh.printClients(list)
 	}
 }
 
@@ -247,15 +247,15 @@ func (sh *Shell) findClients(keyword string) {
 		return
 	}
 
-	printClients(list)
+	sh.printClients(list)
 }
 
-func printClients(list []*database.Client) {
+func (sh *Shell) printClients(list []*database.Client) {
 	tw := tabwriter.NewWriter(os.Stdout, 0, 8, 0, '\t', 0)
 	s := stringer.New()
 	s.WriteString("ID\tClient\tE-mail\tPhone\tAddress\tVAT ID\tCreated\n")
 	for _, c := range list {
-		s.WriteI(
+		_, err := s.WriteI(
 			c.ID,
 			"\t", c.Company,
 			"\t", c.Email,
@@ -265,6 +265,11 @@ func printClients(list []*database.Client) {
 			"\t", c.Created.String(),
 			"\n",
 		)
+
+		if err != nil {
+			sh.e("Error printing to stdout: %s", err.Error())
+			return
+		}
 	}
 	_, _ = tw.Write([]byte(s.String()))
 	tw.Flush()

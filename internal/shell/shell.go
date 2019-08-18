@@ -170,6 +170,7 @@ func (sh *Shell) Run() error {
 		case "task":
 
 		case "job":
+			sh.jobCommands(args)
 
 		case "invoice":
 		default:

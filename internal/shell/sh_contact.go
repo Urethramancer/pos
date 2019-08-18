@@ -16,7 +16,7 @@ func (sh *Shell) contactCommands(args []string) {
 		sh.m("add\t\tAdd contact. You will be asked for details to add.")
 		sh.m("edit <id>\t\tModify contact. You will be asked for details to change.")
 		sh.m("remove <id>\tRemove contact by ID.")
-		sh.m("show <id>\tShow details for specifient contact ID.")
+		sh.m("show <id>\tShow details for specified contact ID.")
 		sh.m("find <keyword>\tSearch for contacts matching the text.")
 		return
 	}

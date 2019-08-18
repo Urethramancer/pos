@@ -16,7 +16,7 @@ func (sh *Shell) clientCommands(args []string) {
 		sh.m("add\t\tAdd client. You will be asked for details to add.")
 		sh.m("edit <id>\t\tModify client. You will be asked for details to change.")
 		sh.m("remove <id>\tRemove client by ID(s).")
-		sh.m("show <id>\tShow details for specifient client ID.")
+		sh.m("show <id>\tShow details for specified client ID.")
 		sh.m("find <keyword>\tSearch for clients matching the text.")
 		return
 	}

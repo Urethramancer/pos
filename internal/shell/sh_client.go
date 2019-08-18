@@ -15,7 +15,7 @@ func (sh *Shell) clientCommands(args []string) {
 		sh.m("list\t\tList all clients.")
 		sh.m("add\t\tAdd client. You will be asked for details to add.")
 		sh.m("edit <id>\t\tModify client. You will be asked for details to change.")
-		sh.m("remove <id>\tRemove client by ID.")
+		sh.m("remove <id>\tRemove client by ID(s).")
 		sh.m("show <id>\tShow details for specifient client ID.")
 		sh.m("find <keyword>\tSearch for clients matching the text.")
 		return
@@ -46,17 +46,18 @@ func (sh *Shell) clientCommands(args []string) {
 
 	case "remove":
 		if len(args) == 0 {
-			sh.m("You must specify a client ID to remove.")
+			sh.m("You must specify one or more client IDs to remove.")
 			return
 		}
 
-		id, err := strconv.Atoi(args[0])
-		if err != nil {
-			sh.e("Error parsing ID: %s", err.Error())
-			break
+		for _, x := range args {
+			id, err := strconv.Atoi(x)
+			if err != nil {
+				sh.e("Error parsing ID: %s", err.Error())
+				break
+			}
+			sh.removeClient(int64(id))
 		}
-
-		sh.removeClient(int64(id))
 
 	case "show":
 		if len(args) == 0 {

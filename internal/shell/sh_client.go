@@ -24,9 +24,6 @@ func (sh *Shell) clientCommands(args []string) {
 	cmd := args[0]
 	args = args[1:]
 	switch cmd {
-	case "list":
-		sh.listClients()
-
 	case "add":
 		sh.addClient()
 
@@ -58,6 +55,9 @@ func (sh *Shell) clientCommands(args []string) {
 			}
 			sh.removeClient(int64(id))
 		}
+
+	case "list":
+		sh.listClients()
 
 	case "show":
 		if len(args) == 0 {

@@ -61,10 +61,10 @@ func (sh *Shell) clientCommands(args []string) {
 
 	case "show":
 		if len(args) == 0 {
-			sh.m("You must specify a client ID to show.")
+			sh.m("You must specify one or more client IDs to show.")
 			return
 		}
-		sh.showClient(args[0])
+		sh.showClients(args)
 
 	case "find":
 		if len(args) == 0 {
@@ -215,16 +215,24 @@ func (sh *Shell) removeClient(id int64) {
 	sh.m("Removed client %d.", id)
 }
 
-func (sh *Shell) showClient(id string) {
-	x, err := strconv.Atoi(id)
-	if err != nil {
-		return
+func (sh *Shell) showClients(idlist []string) {
+	var list []*database.Client
+	for _, id := range idlist {
+		x, err := strconv.Atoi(id)
+		if err != nil {
+			return
+		}
+		c := sh.db.GetClient(int64(x))
+		if c == nil {
+			sh.m("No client with ID %s.", id)
+		} else {
+			list = append(list, c)
+		}
 	}
-	c := sh.db.GetClient(int64(x))
-	if c == nil {
-		sh.m("No client with that ID.")
+	if len(list) == 0 {
+		sh.m("No clients found with supplied ID(s).")
 	} else {
-		printClient(c)
+		printClients(list)
 	}
 }
 
@@ -241,10 +249,6 @@ func (sh *Shell) findClients(keyword string) {
 	}
 
 	printClients(list)
-}
-
-func printClient(c *database.Client) {
-	printClients([]*database.Client{c})
 }
 
 func printClients(list []*database.Client) {

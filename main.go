@@ -1,3 +1,4 @@
+//go:generate inc -s strings.json tpl/index.html tpl/index.css
 package main
 
 import (

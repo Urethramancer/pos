@@ -35,7 +35,7 @@ func (sh *Shell) clientCommands(args []string) {
 
 		id, err := strconv.Atoi(args[0])
 		if err != nil {
-			sh.e("Error parsing ID: %s", err.Error())
+			sh.e("%s: %s", ErrParseID, err.Error())
 			break
 		}
 
@@ -50,7 +50,7 @@ func (sh *Shell) clientCommands(args []string) {
 		for _, x := range args {
 			id, err := strconv.Atoi(x)
 			if err != nil {
-				sh.e("Error parsing ID: %s", err.Error())
+				sh.e("%s: %s", ErrParseID, err.Error())
 				break
 			}
 			sh.removeClient(int64(id))
@@ -86,7 +86,7 @@ func (sh *Shell) addClient() {
 
 	id, err := sh.db.AddClient(c)
 	if err != nil {
-		sh.e("Error adding client: %s", err.Error())
+		sh.e("%s: %s", ErrAddClient, err.Error())
 		return
 	}
 
@@ -107,7 +107,7 @@ func (sh *Shell) editClient(id int64) {
 
 	err := sh.db.UpdateClient(c)
 	if err != nil {
-		sh.e("Error updating client: %s", err.Error())
+		sh.e("%s: %s", ErrUpdateClient, err.Error())
 		return
 	}
 
@@ -121,12 +121,7 @@ func (sh *Shell) promptClient(c *database.Client) *database.Client {
 	}
 
 	var s string
-	if c.Company == "" {
-		s, err = sh.Prompt("Company name: ")
-	} else {
-		s, err = sh.Prompt("Company name [" + c.Company + "]: ")
-	}
-
+	s, err = sh.strPrompt(strCompanyName, c.Company)
 	if err != nil {
 		return nil
 	}
@@ -135,12 +130,7 @@ func (sh *Shell) promptClient(c *database.Client) *database.Client {
 		c.Company = s
 	}
 
-	if c.Email == "" {
-		s, err = sh.Prompt("E-mail: ")
-	} else {
-		s, err = sh.Prompt("E-mail [" + c.Email + "]: ")
-	}
-
+	s, err = sh.strPrompt(strEmail, c.Email)
 	if err != nil {
 		return nil
 	}
@@ -149,12 +139,7 @@ func (sh *Shell) promptClient(c *database.Client) *database.Client {
 		c.Email = s
 	}
 
-	if c.Phone == "" {
-		s, err = sh.Prompt("Phone: ")
-	} else {
-		s, err = sh.Prompt("Phone [" + c.Phone + "]: ")
-	}
-
+	s, err = sh.strPrompt(strPhone, c.Phone)
 	if err != nil {
 		return nil
 	}
@@ -163,12 +148,7 @@ func (sh *Shell) promptClient(c *database.Client) *database.Client {
 		c.Phone = s
 	}
 
-	if c.Address == "" {
-		s, err = sh.Prompt("Address: ")
-	} else {
-		s, err = sh.Prompt("Address [" + c.Address + "]: ")
-	}
-
+	s, err = sh.strPrompt(strAddress, c.Address)
 	if err != nil {
 		return nil
 	}
@@ -177,12 +157,7 @@ func (sh *Shell) promptClient(c *database.Client) *database.Client {
 		c.Address = s
 	}
 
-	if c.VATID == "" {
-		s, err = sh.Prompt("VAT registration/ID: ")
-	} else {
-		s, err = sh.Prompt("VAT registration/ID [" + c.VATID + "]: ")
-	}
-
+	s, err = sh.strPrompt(strVATID, c.VATID)
 	if err != nil {
 		return nil
 	}
@@ -197,7 +172,7 @@ func (sh *Shell) promptClient(c *database.Client) *database.Client {
 func (sh *Shell) removeClient(id int64) {
 	err := sh.db.RemoveClient(id)
 	if err != nil {
-		sh.e("Error removing client: %s", err.Error())
+		sh.e("%s: %s", ErrRemoveClient, err.Error())
 		return
 	}
 
@@ -207,7 +182,7 @@ func (sh *Shell) removeClient(id int64) {
 func (sh *Shell) listClients() {
 	list, err := sh.db.GetAllClients()
 	if err != nil {
-		sh.e("Error retrieving client list: %s", err.Error())
+		sh.e("%s: %s", ErrGetClientList, err.Error())
 		return
 	}
 
@@ -238,7 +213,7 @@ func (sh *Shell) showClients(idlist []string) {
 func (sh *Shell) findClients(keyword string) {
 	list, err := sh.db.GetClients(keyword)
 	if err != nil {
-		sh.e("Error retrieving clients: %s", err.Error())
+		sh.e("%s: %s", ErrGetClientList, err.Error())
 		return
 	}
 

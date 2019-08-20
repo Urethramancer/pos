@@ -45,7 +45,7 @@ func (sh *Shell) jobCommands(args []string) {
 		for _, x := range args {
 			id, err := strconv.Atoi(x)
 			if err != nil {
-				sh.e("Error parsing ID: %s", err.Error())
+				sh.e("%s: %s", ErrParseID, err.Error())
 				break
 			}
 			sh.removeJob(int64(id))
@@ -57,7 +57,7 @@ func (sh *Shell) jobCommands(args []string) {
 		} else {
 			id, err := strconv.Atoi(args[0])
 			if err != nil {
-				sh.e("Error converting ID.")
+				sh.e("%s.", ErrParseID)
 				break
 			}
 
@@ -71,7 +71,7 @@ func (sh *Shell) jobCommands(args []string) {
 func (sh *Shell) addJob(args []string) {
 	client, err := strconv.Atoi(args[0])
 	if err != nil {
-		sh.e("Error converting ID: %s", err.Error())
+		sh.e("%s: %s", ErrConvertID, err.Error())
 		return
 	}
 
@@ -81,7 +81,7 @@ func (sh *Shell) addJob(args []string) {
 	}
 	id, err := sh.db.AddJob(j)
 	if err != nil {
-		sh.e("Error adding job: %s", err.Error())
+		sh.e("%s: %s", ErrAddJob, err.Error())
 		return
 	}
 
@@ -92,13 +92,13 @@ func (sh *Shell) editJob(args []string) {
 	var err error
 	id, err := strconv.Atoi(args[0])
 	if err != nil {
-		sh.e("Error converting ID: %s", err.Error())
+		sh.e("%s: %s", ErrConvertID, err.Error())
 		return
 	}
 
 	client, err := strconv.Atoi(args[1])
 	if err != nil {
-		sh.e("Error converting ID: %s", err.Error())
+		sh.e("%s: %s", ErrConvertID, err.Error())
 		return
 	}
 
@@ -109,7 +109,7 @@ func (sh *Shell) editJob(args []string) {
 	}
 	err = sh.db.UpdateJob(j)
 	if err != nil {
-		sh.e("Error editing job: %s", err.Error())
+		sh.e("%s: %s", ErrEditJob, err.Error())
 		return
 	}
 
@@ -119,7 +119,7 @@ func (sh *Shell) editJob(args []string) {
 func (sh *Shell) removeJob(id int64) {
 	err := sh.db.RemoveJob(id)
 	if err != nil {
-		sh.e("Error removing job: %s", err.Error())
+		sh.e("%s: %s", ErrRemoveJob, err.Error())
 		return
 	}
 
@@ -129,7 +129,7 @@ func (sh *Shell) removeJob(id int64) {
 func (sh *Shell) listJobs() {
 	list, err := sh.db.GetAllJobs()
 	if err != nil {
-		sh.e("Error retrieving job list: %s", err.Error())
+		sh.e("%s: %s", ErrGetJobList, err.Error())
 		return
 	}
 
@@ -139,7 +139,7 @@ func (sh *Shell) listJobs() {
 func (sh *Shell) listJobsFor(id int64) {
 	list, err := sh.db.GetJobsFor(id)
 	if err != nil {
-		sh.e("Error retrieving job list: %s", err.Error())
+		sh.e("%s: %s", ErrGetJobList, err.Error())
 		return
 	}
 
@@ -149,7 +149,7 @@ func (sh *Shell) listJobsFor(id int64) {
 func (sh *Shell) showJob(id int64) {
 	j, err := sh.db.GetJob(id)
 	if err != nil {
-		sh.e("Error retrieving job: %s", err.Error())
+		sh.e("%s: %s", ErrGetJob, err.Error())
 		return
 	}
 

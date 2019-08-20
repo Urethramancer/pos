@@ -1,7 +1,6 @@
 package shell
 
 import (
-	"fmt"
 	"os"
 	"strconv"
 	"text/tabwriter"
@@ -35,7 +34,7 @@ func (sh *Shell) contactCommands(args []string) {
 
 		id, err := strconv.Atoi(args[0])
 		if err != nil {
-			sh.e("Error parsing ID: %s", err.Error())
+			sh.e("%s: %s", ErrParseID, err.Error())
 			break
 		}
 
@@ -50,7 +49,7 @@ func (sh *Shell) contactCommands(args []string) {
 		for _, x := range args {
 			id, err := strconv.Atoi(x)
 			if err != nil {
-				sh.e("Error parsing ID: %s", err.Error())
+				sh.e("%s: %s", ErrParseID, err.Error())
 				break
 			}
 			sh.removeContact(int64(id))
@@ -83,17 +82,17 @@ func (sh *Shell) addContact() {
 
 	id, err := sh.db.AddContact(c)
 	if err != nil {
-		sh.e("Error adding client: %s", err.Error())
+		sh.e("%s: %s", ErrAddContact, err.Error())
 		return
 	}
 
-	sh.m("Added client %s with ID %d.", c.Name, id)
+	sh.m("Added contact %s with ID %d.", c.Name, id)
 }
 
 func (sh *Shell) editContact(id int64) {
 	c := sh.db.GetContact(id)
 	if c == nil {
-		sh.e("No client with that ID.")
+		sh.e("No contact with that ID.")
 		return
 	}
 
@@ -104,11 +103,11 @@ func (sh *Shell) editContact(id int64) {
 
 	err := sh.db.UpdateContact(c)
 	if err != nil {
-		sh.e("Error updating client: %s", err.Error())
+		sh.e("%s: %s", ErrUpdateContact, err.Error())
 		return
 	}
 
-	sh.m("Updated client %s with ID %d.", c.Name, c.ID)
+	sh.m("Updated contact %s with ID %d.", c.Name, c.ID)
 }
 
 func (sh *Shell) promptContact(c *database.Contact) *database.Contact {
@@ -118,13 +117,7 @@ func (sh *Shell) promptContact(c *database.Contact) *database.Contact {
 	}
 
 	var s string
-	if c.Name == "" {
-		s, err = sh.Prompt(strName + ": ")
-	} else {
-		x := fmt.Sprintf("%s [%s]: ", strName, c.Name)
-		s, err = sh.Prompt(x)
-	}
-
+	s, err = sh.strPrompt(strName, c.Name)
 	if err != nil {
 		return nil
 	}
@@ -133,13 +126,7 @@ func (sh *Shell) promptContact(c *database.Contact) *database.Contact {
 		c.Name = s
 	}
 
-	if c.Email == "" {
-		s, err = sh.Prompt(strEmail + ": ")
-	} else {
-		x := fmt.Sprintf("%s [%s]: ", strEmail, c.Email)
-		s, err = sh.Prompt(x)
-	}
-
+	s, err = sh.strPrompt(strEmail, c.Email)
 	if err != nil {
 		return nil
 	}
@@ -148,13 +135,7 @@ func (sh *Shell) promptContact(c *database.Contact) *database.Contact {
 		c.Email = s
 	}
 
-	if c.Phone == "" {
-		s, err = sh.Prompt(strPhone + ": ")
-	} else {
-		x := fmt.Sprintf("%s [%s]: ", strPhone, c.Phone)
-		s, err = sh.Prompt(x)
-	}
-
+	s, err = sh.strPrompt(strPhone, c.Phone)
 	if err != nil {
 		return nil
 	}
@@ -163,13 +144,7 @@ func (sh *Shell) promptContact(c *database.Contact) *database.Contact {
 		c.Phone = s
 	}
 
-	if c.Client == 0 {
-		s, err = sh.Prompt(strCompanyID + ": ")
-	} else {
-		x := fmt.Sprintf("%s [%d]: ", strCompanyID, c.Client)
-		s, err = sh.Prompt(x)
-	}
-
+	s, err = sh.intPrompt(strCompanyID, c.Client)
 	if err != nil {
 		return nil
 	}
@@ -177,7 +152,7 @@ func (sh *Shell) promptContact(c *database.Contact) *database.Contact {
 	if s != "" {
 		id, err := strconv.Atoi(s)
 		if err != nil {
-			sh.e("Error converting ID.")
+			sh.e("%s.", ErrConvertID)
 			return nil
 		}
 
@@ -201,7 +176,7 @@ func (sh *Shell) promptContact(c *database.Contact) *database.Contact {
 func (sh *Shell) removeContact(id int64) {
 	err := sh.db.RemoveContact(id)
 	if err != nil {
-		sh.e("Error removing contact: %s", err.Error())
+		sh.e("%s: %s", ErrRemoveContact, err.Error())
 		return
 	}
 
@@ -211,7 +186,7 @@ func (sh *Shell) removeContact(id int64) {
 func (sh *Shell) listContacts() {
 	list, err := sh.db.GetAllContacts()
 	if err != nil {
-		sh.e("Error retrieving client list: %s", err.Error())
+		sh.e("%s: %s", ErrGetContactList, err.Error())
 		return
 	}
 
@@ -242,7 +217,7 @@ func (sh *Shell) showContacts(idlist []string) {
 func (sh *Shell) findContacts(keyword string) {
 	list, err := sh.db.GetContacts(keyword)
 	if err != nil {
-		sh.e("Error retrieving clients: %s", err.Error())
+		sh.e("%s: %s", ErrGetContactList, err.Error())
 		return
 	}
 

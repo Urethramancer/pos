@@ -10,6 +10,13 @@ import (
 	"github.com/Urethramancer/signor/stringer"
 )
 
+const (
+	contactName      = "Name"
+	contactEmail     = "E-mail"
+	contactPhone     = "Phone"
+	contactCompanyID = "Company ID"
+)
+
 func (sh *Shell) contactCommands(args []string) {
 	if len(args) == 0 {
 		sh.m("list\t\tList all contacts.")
@@ -119,9 +126,10 @@ func (sh *Shell) promptContact(c *database.Contact) *database.Contact {
 
 	var s string
 	if c.Name == "" {
-		s, err = sh.Prompt("Name: ")
+		s, err = sh.Prompt(contactName + ": ")
 	} else {
-		s, err = sh.Prompt("Name [" + c.Name + "]: ")
+		x := fmt.Sprintf("%s [%s]: ", contactName, c.Name)
+		s, err = sh.Prompt(x)
 	}
 
 	if err != nil {
@@ -133,9 +141,10 @@ func (sh *Shell) promptContact(c *database.Contact) *database.Contact {
 	}
 
 	if c.Email == "" {
-		s, err = sh.Prompt("E-mail: ")
+		s, err = sh.Prompt(contactEmail + ": ")
 	} else {
-		s, err = sh.Prompt("E-mail [" + c.Email + "]: ")
+		x := fmt.Sprintf("%s [%s]: ", contactEmail, c.Email)
+		s, err = sh.Prompt(x)
 	}
 
 	if err != nil {
@@ -147,9 +156,10 @@ func (sh *Shell) promptContact(c *database.Contact) *database.Contact {
 	}
 
 	if c.Phone == "" {
-		s, err = sh.Prompt("Phone: ")
+		s, err = sh.Prompt(contactPhone + ": ")
 	} else {
-		s, err = sh.Prompt("Phone [" + c.Phone + "]: ")
+		x := fmt.Sprintf("%s [%s]: ", contactPhone, c.Phone)
+		s, err = sh.Prompt(x)
 	}
 
 	if err != nil {
@@ -161,9 +171,9 @@ func (sh *Shell) promptContact(c *database.Contact) *database.Contact {
 	}
 
 	if c.Client == 0 {
-		s, err = sh.Prompt("Company ID: ")
+		s, err = sh.Prompt(contactCompanyID + ": ")
 	} else {
-		x := fmt.Sprintf("Company ID [%d]: ", c.Client)
+		x := fmt.Sprintf("%s [%d]: ", contactCompanyID, c.Client)
 		s, err = sh.Prompt(x)
 	}
 
@@ -186,8 +196,10 @@ func (sh *Shell) promptContact(c *database.Contact) *database.Contact {
 
 		c.Client = int64(id)
 	} else {
-		sh.e("You must specify a company ID.")
-		return nil
+		if c.Client == 0 {
+			sh.e("You must specify a company ID.")
+			return nil
+		}
 	}
 
 	return c

@@ -10,13 +10,6 @@ import (
 	"github.com/Urethramancer/signor/stringer"
 )
 
-const (
-	contactName      = "Name"
-	contactEmail     = "E-mail"
-	contactPhone     = "Phone"
-	contactCompanyID = "Company ID"
-)
-
 func (sh *Shell) contactCommands(args []string) {
 	if len(args) == 0 {
 		sh.m("list\t\tList all contacts.")
@@ -126,9 +119,9 @@ func (sh *Shell) promptContact(c *database.Contact) *database.Contact {
 
 	var s string
 	if c.Name == "" {
-		s, err = sh.Prompt(contactName + ": ")
+		s, err = sh.Prompt(strName + ": ")
 	} else {
-		x := fmt.Sprintf("%s [%s]: ", contactName, c.Name)
+		x := fmt.Sprintf("%s [%s]: ", strName, c.Name)
 		s, err = sh.Prompt(x)
 	}
 
@@ -141,9 +134,9 @@ func (sh *Shell) promptContact(c *database.Contact) *database.Contact {
 	}
 
 	if c.Email == "" {
-		s, err = sh.Prompt(contactEmail + ": ")
+		s, err = sh.Prompt(strEmail + ": ")
 	} else {
-		x := fmt.Sprintf("%s [%s]: ", contactEmail, c.Email)
+		x := fmt.Sprintf("%s [%s]: ", strEmail, c.Email)
 		s, err = sh.Prompt(x)
 	}
 
@@ -156,9 +149,9 @@ func (sh *Shell) promptContact(c *database.Contact) *database.Contact {
 	}
 
 	if c.Phone == "" {
-		s, err = sh.Prompt(contactPhone + ": ")
+		s, err = sh.Prompt(strPhone + ": ")
 	} else {
-		x := fmt.Sprintf("%s [%s]: ", contactPhone, c.Phone)
+		x := fmt.Sprintf("%s [%s]: ", strPhone, c.Phone)
 		s, err = sh.Prompt(x)
 	}
 
@@ -171,9 +164,9 @@ func (sh *Shell) promptContact(c *database.Contact) *database.Contact {
 	}
 
 	if c.Client == 0 {
-		s, err = sh.Prompt(contactCompanyID + ": ")
+		s, err = sh.Prompt(strCompanyID + ": ")
 	} else {
-		x := fmt.Sprintf("%s [%d]: ", contactCompanyID, c.Client)
+		x := fmt.Sprintf("%s [%d]: ", strCompanyID, c.Client)
 		s, err = sh.Prompt(x)
 	}
 
